@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Rakshak-Route | Convoy Monitoring</title>
+
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js" defer></script>
+</head>
+
+<body>
+    <aside class="sidebar">
+        <div class="brand">
+            <div class="brand-icon">R</div>
+            <div>
+                <h2>RAKSHAK</h2>
+                <p>ROUTE SYSTEMS</p>
+            </div>
+        </div>
+
+        <nav>
+            <a href="#overview" class="nav-link active">◈ Overview</a>
+            <a href="#convoy" class="nav-link">▣ Convoy Status</a>
+            <a href="#alerts" class="nav-link">⚠ Alerts</a>
+            <a href="#connectivity" class="nav-link">⌁ Connectivity</a>
+        </nav>
+
+        <div class="sidebar-footer">
+            <span class="status-dot"></span>
+            EDUCATIONAL PROTOTYPE
+        </div>
+    </aside>
+
+    <main class="main-content" id="overview">
+        <header class="topbar">
+            <div>
+                <p class="eyebrow">MISSION CONTROL / DASHBOARD</p>
+                <h1>Convoy Monitoring</h1>
+                <p class="subtitle">
+                    Resilient monitoring for low-connectivity environments
+                </p>
+            </div>
+
+            <div class="connection-badge" id="connectionStatus">
+                <span class="status-dot"></span>
+                <span id="connectionText">SIMULATION MODE</span>
+            </div>
+        </header>
+
+        <section class="notice">
+            <strong>PROTOTYPE MODE</strong>
+            <span>
+                All vehicle, location and health-related readings are simulated.
+            </span>
+        </section>
+
+        <section class="section" id="convoy">
+            <div class="section-heading">
+                <div>
+                    <p class="eyebrow">LIVE SIMULATED DATA</p>
+                    <h2>Convoy Overview</h2>
+                </div>
+
+                <span class="pill">● DEMO DATA</span>
+            </div>
+
+            <div class="stats-grid">
+                <article class="card vehicle-card">
+                    <p class="card-label">VEHICLE IDENTIFICATION</p>
+                    <h3 id="vehicleId">CONVOY-001</h3>
+                    <p class="muted">Primary convoy unit</p>
+                    <div class="card-bottom">
+                        <span>STATUS</span>
+                        <span class="status-text">SIMULATED</span>
+                    </div>
+                </article>
+
+                <article class="card">
+                    <p class="card-label">FUEL LEVEL</p>
+                    <div class="metric">
+                        <strong id="fuelValue">78%</strong>
+                        <span>Available</span>
+                    </div>
+                    <div class="progress-track">
+                        <div class="progress-fill fuel-fill" id="fuelBar"></div>
+                    </div>
+                    <p class="muted">Illustrative reading</p>
+                </article>
+
+                <article class="card">
+                    <p class="card-label">OXYGEN READING</p>
+                    <div class="metric">
+                        <strong id="oxygenValue">96%</strong>
+                        <span>Simulated</span>
+                    </div>
+                    <div class="progress-track">
+                        <div class="progress-fill oxygen-fill" id="oxygenBar"></div>
+                    </div>
+                    <p class="muted">Not a medical measurement</p>
+                </article>
+            </div>
+        </section>
+
+        <section class="lower-grid">
+            <article class="card location-card">
+                <p class="eyebrow">POSITION DATA</p>
+                <h2>Simulated Location</h2>
+
+                <div class="coordinates">
+                    <div>
+                        <span>LATITUDE</span>
+                        <strong id="latitude">34.1526</strong>
+                    </div>
+
+                    <div>
+                        <span>LONGITUDE</span>
+                        <strong id="longitude">77.5771</strong>
+                    </div>
+                </div>
+
+                <p class="muted">
+                    Illustrative coordinates; no live GPS connection.
+                </p>
+            </article>
+
+            <article class="card" id="alerts">
+                <p class="eyebrow">SYSTEM NOTIFICATIONS</p>
+                <h2>Alert Center</h2>
+                <div id="alertList" class="alert-list">
+                    <p class="alert-item">Loading simulated alerts...</p>
+                </div>
+            </article>
+        </section>
+
+        <section class="card connectivity-card" id="connectivity">
+            <div>
+                <p class="eyebrow">NETWORK MONITORING</p>
+                <h2>Connectivity Status</h2>
+                <p class="muted">
+                    Network state is not connected to a real communications system.
+                </p>
+            </div>
+
+            <span class="pill" id="networkState">DEMO MODE</span>
+        </section>
+
+        <footer>
+            <p>RAKSHAK-ROUTE · EDUCATIONAL PROTOTYPE · v0.1</p>
+            <p>Not for operational military or medical use.</p>
+        </footer>
+    </main>
+</body>
+</html>
