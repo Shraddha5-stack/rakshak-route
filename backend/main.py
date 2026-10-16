@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from backend.alert_service import generate_alerts
 
 app = FastAPI(
     title="Rakshak-Route API",
@@ -26,14 +27,23 @@ def health_check():
 
 @app.get("/api/convoy")
 def get_convoy_status():
+    fuel_level = 78
+    oxygen_level = 96
+
+    alerts = generate_alerts(
+        fuel_level_percent=fuel_level,
+        oxygen_level_percent=oxygen_level,
+    )
+
     return {
         "vehicle_id": "CONVOY-001",
         "location": {
             "latitude": 34.1526,
             "longitude": 77.5771,
         },
-        "fuel_level_percent": 78,
-        "oxygen_level_percent": 96,
+        "fuel_level_percent": fuel_level,
+        "oxygen_level_percent": oxygen_level,
         "emergency": False,
         "data_type": "simulated",
+        "alerts": alerts,
     }
