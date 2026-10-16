@@ -3,30 +3,15 @@
 // Rakshak-Route dashboard
 // Educational prototype: all readings are simulated.
 
-const convoyData = {
-    vehicle_id: "CONVOY-001",
+const API_URL = "http://127.0.0.1:8000/api/convoy";
 
-    location: {
-        latitude: 34.1526,
-        longitude: 77.5771
-    },
-
-    fuel_level_percent: 78,
-    oxygen_level_percent: 96,
-
-    data_type: "simulated"
-};
-
-
-// Display convoy information
+// Display convoy information received from the API
 function displayConvoyData(data) {
     const vehicleId = document.getElementById("vehicleId");
     const fuelValue = document.getElementById("fuelValue");
     const oxygenValue = document.getElementById("oxygenValue");
-
     const fuelBar = document.getElementById("fuelBar");
     const oxygenBar = document.getElementById("oxygenBar");
-
     const latitude = document.getElementById("latitude");
     const longitude = document.getElementById("longitude");
 
@@ -47,59 +32,26 @@ function displayConvoyData(data) {
 
     fuelValue.textContent = `${data.fuel_level_percent}%`;
     fuelBar.style.width = `${data.fuel_level_percent}%`;
+    fuelBar.setAttribute("aria-valuenow", data.fuel_level_percent);
 
     oxygenValue.textContent = `${data.oxygen_level_percent}%`;
     oxygenBar.style.width = `${data.oxygen_level_percent}%`;
+    oxygenBar.setAttribute("aria-valuenow", data.oxygen_level_percent);
 
     latitude.textContent = data.location.latitude;
     longitude.textContent = data.location.longitude;
 
-    displayAlerts(data);
+    displayAlerts(data.alerts || []);
 }
 
-
-// Generate alerts using illustrative thresholds
-function generateAlerts(data) {
-    const alerts = [];
-
-    if (data.fuel_level_percent <= 20) {
-        alerts.push({
-            type: "LOW_FUEL",
-            message: "Fuel level is low.",
-            severity: "warning"
-        });
-    }
-
-    if (data.oxygen_level_percent <= 90) {
-        alerts.push({
-            type: "LOW_OXYGEN_READING",
-            message: "Simulated oxygen reading is low.",
-            severity: "warning"
-        });
-    }
-
-    if (alerts.length === 0) {
-        alerts.push({
-            type: "NO_ALERT",
-            message: "No alerts detected in the simulated readings.",
-            severity: "info"
-        });
-    }
-
-    return alerts;
-}
-
-
-// Display generated alerts
-function displayAlerts(data) {
+// Display alerts received from the backend API
+function displayAlerts(alerts) {
     const alertList = document.getElementById("alertList");
 
     if (!alertList) {
         console.error("Alert container was not found.");
         return;
     }
-
-    const alerts = generateAlerts(data);
 
     alertList.replaceChildren();
 
@@ -113,11 +65,16 @@ function displayAlerts(data) {
         }
 
         item.textContent = `${alert.type}: ${alert.message}`;
-
         alertList.appendChild(item);
     });
-}
 
+    if (alerts.length === 0) {
+        const item = document.createElement("p");
+        item.className = "alert-item";
+        item.textContent = "No alerts available.";
+        alertList.appendChild(item);
+    }
+}
 
 // Display browser connectivity for demonstration only
 function updateConnectivityStatus() {
@@ -137,19 +94,44 @@ function updateConnectivityStatus() {
     }
 }
 
-
-// Initialize the dashboard
-function initializeDashboard() {
-    displayConvoyData(convoyData);
+// Fetch live API response and initialize the dashboard
+async function initializeDashboard() {
     updateConnectivityStatus();
 
     window.addEventListener("online", updateConnectivityStatus);
     window.addEventListener("offline", updateConnectivityStatus);
 
-    console.log("Rakshak-Route dashboard initialized.");
-    console.log("Data type:", convoyData.data_type);
-}
+    try {
+        const response = await fetch(API_URL);
 
+        if (!response.ok) {
+            throw new Error(`API request failed: HTTP ${response.status}`);
+        }
+
+        const convoyData = await response.json();
+
+        displayConvoyData(convoyData);
+
+        console.log("Rakshak-Route dashboard initialized.");
+        console.log("API data received:", convoyData);
+        console.log("Data type:", convoyData.data_type);
+    } catch (error) {
+        console.error("Unable to load convoy data:", error);
+
+        const alertList = document.getElementById("alertList");
+
+        if (alertList) {
+            alertList.replaceChildren();
+
+            const item = document.createElement("p");
+            item.className = "alert-item warning";
+            item.textContent =
+                "Unable to load convoy data. Check the API server and connection.";
+
+            alertList.appendChild(item);
+        }
+    }
+}
 
 // Start when the HTML document is ready
 document.addEventListener("DOMContentLoaded", initializeDashboard);

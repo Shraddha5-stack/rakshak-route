@@ -1,10 +1,26 @@
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+
 from backend.alert_service import generate_alerts
+
 
 app = FastAPI(
     title="Rakshak-Route API",
     description="Prototype API for low-connectivity convoy monitoring",
     version="0.2.0",
+)
+
+
+# Allow the local frontend to access the backend API.
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[
+        "http://127.0.0.1:5500",
+        "http://localhost:5500",
+    ],
+    allow_credentials=False,
+    allow_methods=["GET"],
+    allow_headers=["*"],
 )
 
 
