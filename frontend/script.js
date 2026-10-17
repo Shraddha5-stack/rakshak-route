@@ -3,7 +3,7 @@
 // Rakshak-Route dashboard
 // Educational prototype: all readings are simulated.
 
-const API_URL = "http://127.0.0.1:8000/api/convoy";
+const API_URL = window.RAKSHAK_API_URL || "http://127.0.0.1:8000/api/convoy";
 
 // Display convoy information received from the API
 function displayConvoyData(data) {
