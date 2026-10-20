@@ -2,7 +2,10 @@ import json
 from pathlib import Path
 
 
-QUEUE_FILE = Path(__file__).parent / "offline_queue.json"
+import os
+
+QUEUE_DIR = Path(os.getenv("RAKSHAK_DATA_DIR", str(Path(__file__).parent)))
+QUEUE_FILE = QUEUE_DIR / "offline_queue.json"
 
 
 def save_offline_update(update):

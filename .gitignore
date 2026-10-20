@@ -8,3 +8,7 @@ dist/
 build/
 frontend/script.js.backup
 README.md.backup
+
+# Local backup files
+*.backup
+offline_queue_migration.json
