@@ -153,6 +153,56 @@
             <p>RAKSHAK-ROUTE · EDUCATIONAL PROTOTYPE · v0.1</p>
             <p>Not for operational military or medical use.</p>
         </footer>
+
+        <section class="section" id="offline-updates">
+            <div class="card">
+                <h2>Store Offline Convoy Update</h2>
+                <p>Submit simulated telemetry to the local offline queue.</p>
+
+                <form id="offline-update-form">
+                    <p>
+                        <label for="vehicle-id">Vehicle ID</label><br>
+                        <input type="text" id="vehicle-id" maxlength="64"
+                               value="CONVOY-001" required>
+                    </p>
+
+                    <p>
+                        <label for="fuel-level">Fuel Level (%)</label><br>
+                        <input type="number" id="fuel-level"
+                               min="0" max="100" value="75" required>
+                    </p>
+
+                    <p>
+                        <label for="oxygen-level">Oxygen Level (%)</label><br>
+                        <input type="number" id="oxygen-level"
+                               min="0" max="100" value="94" required>
+                    </p>
+
+                    <p>
+                        <label>
+                            <input type="checkbox" id="emergency">
+                            Emergency alert (simulated)
+                        </label>
+                    </p>
+
+                    <button type="submit">Save Offline Update</button>
+                </form>
+
+                <p id="offline-form-message" role="status"
+                   aria-live="polite"></p>
+
+                <hr>
+
+                <h3>Pending Offline Updates</h3>
+                <button type="button" id="refresh-queue">
+                    Refresh Queue
+                </button>
+
+                <p id="queue-count">Pending updates will appear here.</p>
+                <ul id="offline-queue-list"></ul>
+            </div>
+        </section>
+
     </main>
 </body>
 </html>

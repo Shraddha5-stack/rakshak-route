@@ -134,4 +134,157 @@ async function initializeDashboard() {
 }
 
 // Start when the HTML document is ready
-document.addEventListener("DOMContentLoaded", initializeDashboard);
+document.addEventListener("DOMContentLoaded", () => {
+    initializeDashboard();
+    initializeOfflineUpdates();
+});
+
+// Offline queue API endpoint
+const OFFLINE_UPDATES_URL = API_URL.replace(
+    /\/api\/convoy\/?$/,
+    "/api/offline/updates"
+);
+
+// Show a status message below the offline update form
+function showOfflineFormMessage(message, isError = false) {
+    const messageElement = document.getElementById("offline-form-message");
+
+    if (!messageElement) {
+        return;
+    }
+
+    messageElement.textContent = message;
+    messageElement.style.color = isError ? "red" : "green";
+}
+
+// Load and display pending updates from the backend
+async function loadOfflineQueue() {
+    const countElement = document.getElementById("queue-count");
+    const listElement = document.getElementById("offline-queue-list");
+
+    if (!countElement || !listElement) {
+        return;
+    }
+
+    countElement.textContent = "Loading pending updates...";
+
+    try {
+        const response = await fetch(OFFLINE_UPDATES_URL);
+
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status}`);
+        }
+
+        const result = await response.json();
+
+        listElement.replaceChildren();
+
+        countElement.textContent =
+            `Pending updates: ${result.pending_count}`;
+
+        if (result.updates.length === 0) {
+            const item = document.createElement("li");
+            item.textContent = "No pending updates.";
+            listElement.appendChild(item);
+            return;
+        }
+
+        result.updates.forEach((update) => {
+            const item = document.createElement("li");
+
+            const locationText = update.location
+                ? ` | Location: ${update.location.latitude ?? "N/A"}, ${update.location.longitude ?? "N/A"}`
+                : "";
+
+            item.textContent =
+                `${update.vehicle_id} | Fuel: ${update.fuel_level_percent ?? "N/A"}%` +
+                ` | Oxygen: ${update.oxygen_level_percent ?? "N/A"}%` +
+                ` | Emergency: ${update.emergency ? "YES" : "NO"}` +
+                locationText;
+
+            listElement.appendChild(item);
+        });
+    } catch (error) {
+        console.error("Unable to load offline queue:", error);
+        countElement.textContent =
+            "Unable to load queue. Check the backend connection.";
+    }
+}
+
+// Connect the offline update form to the backend
+function initializeOfflineUpdates() {
+    const form = document.getElementById("offline-update-form");
+    const refreshButton = document.getElementById("refresh-queue");
+
+    if (!form) {
+        console.error("Offline update form was not found.");
+        return;
+    }
+
+    form.addEventListener("submit", async (event) => {
+        event.preventDefault();
+
+        const submitButton = form.querySelector('button[type="submit"]');
+
+        const payload = {
+            vehicle_id: document.getElementById("vehicle-id").value.trim(),
+            fuel_level_percent: Number(
+                document.getElementById("fuel-level").value
+            ),
+            oxygen_level_percent: Number(
+                document.getElementById("oxygen-level").value
+            ),
+            emergency: document.getElementById("emergency").checked,
+            data_type: "simulated"
+        };
+
+        if (!payload.vehicle_id) {
+            showOfflineFormMessage("Vehicle ID is required.", true);
+            return;
+        }
+
+        submitButton.disabled = true;
+        showOfflineFormMessage("Saving update...");
+
+        try {
+            const response = await fetch(OFFLINE_UPDATES_URL, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(payload)
+            });
+
+            const result = await response.json();
+
+            if (!response.ok) {
+                throw new Error(
+                    result.detail
+                        ? JSON.stringify(result.detail)
+                        : `HTTP ${response.status}`
+                );
+            }
+
+            showOfflineFormMessage(
+                `Update saved successfully. Queued updates: ${result.queued_updates}`
+            );
+
+            await loadOfflineQueue();
+        } catch (error) {
+            console.error("Unable to save offline update:", error);
+
+            showOfflineFormMessage(
+                "Could not save update. Check the backend connection and try again.",
+                true
+            );
+        } finally {
+            submitButton.disabled = false;
+        }
+    });
+
+    if (refreshButton) {
+        refreshButton.addEventListener("click", loadOfflineQueue);
+    }
+
+    loadOfflineQueue();
+}
