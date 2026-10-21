@@ -2,104 +2,164 @@
 
 **Resilient Convoy Tracking for Low-Connectivity Environments**
 
-## Overview
+Rakshak-Route is an educational prototype exploring simulated convoy
+tracking and offline data handling in areas with unreliable internet
+connectivity.
 
-Rakshak-Route is an educational prototype designed to explore convoy
-tracking and vehicle safety in areas with unreliable internet connectivity.
+## Problem Statement
 
-## Problem
+Unreliable network connectivity can interrupt vehicle monitoring.
+This project demonstrates how simulated telemetry updates can be stored
+locally and processed through a synchronization workflow.
 
-Unreliable network connectivity can make remote vehicle monitoring difficult.
-This project explores ways to collect and synchronize vehicle telemetry
-when internet access is unavailable.
+## Implemented Features
 
-## Planned Features
-
-- Simulated vehicle location tracking
-- Vehicle fuel status monitoring
-- Simulated health and oxygen readings
-- Emergency alerts
-- Local data storage during network outages
-- Data synchronization after connectivity returns
-- Web-based monitoring dashboard
-- Docker packaging
-- AWS Elastic Beanstalk deployment
-- Amazon SQS integration
+- FastAPI backend for simulated convoy telemetry.
+- Web dashboard using HTML, CSS, and JavaScript.
+- Simulated fuel and oxygen readings.
+- Threshold-based alerts.
+- Emergency status support.
+- Offline update submission through a web form.
+- API endpoints to add and retrieve queued updates.
+- JSON-based offline queue.
+- Docker Compose frontend and backend services.
+- Persistent queue storage using a Docker named volume.
+- Simulated offline and online synchronization.
+- Automated API tests.
 
 ## Technology Stack
 
 - Python
 - FastAPI
-- HTML, CSS and JavaScript
+- HTML, CSS, JavaScript
+- Docker and Docker Compose
 - Git and GitHub
-- Docker
-- AWS Elastic Beanstalk
-- Amazon SQS
+- Pytest
 
-## Project Status
+## Architecture
 
-Day 1: Initial project structure and Python environment created.
+The frontend communicates with the FastAPI backend over HTTP.
 
-## Disclaimer
+The backend provides convoy telemetry and offline update endpoints.
+Pending updates are stored in a JSON queue. Docker Compose uses a named
+volume to preserve queue data when the backend container is recreated.
 
-This is an educational prototype. Location, health readings, and
-connectivity failures will initially be simulated. It is not an
-operational military tracking or medical monitoring system.
+The synchronization endpoint demonstrates offline and online behavior.
+It does not verify delivery to a remote server.
 
-## Current Implementation Status
+## Run the Project
 
-Rakshak-Route is an educational prototype built with FastAPI, HTML, CSS,
-JavaScript, Docker, and Docker Compose.
+Clone the repository:
 
-Implemented capabilities include:
+```bash
+git clone https://github.com/Shraddha5-stack/rakshak-route.git
+cd rakshak-route
+```
 
-- Simulated convoy telemetry API
-- Fuel and oxygen threshold-based alerts
-- Offline convoy updates stored in a JSON queue
-- API endpoints to submit and retrieve pending updates
-- Docker Compose services for the frontend and backend
-- Persistent offline queue using a Docker named volume
-- Automated API tests
+Start the application with Docker Compose:
 
-## Docker Persistence Verification
+```bash
+docker compose up -d --build
+```
+
+Open the dashboard:
+
+http://127.0.0.1:5500
+
+Check backend health:
+
+http://127.0.0.1:8000/health
+
+Stop the containers without deleting persistent queue data:
+
+```bash
+docker compose down
+```
+
+**Important:** Avoid `docker compose down -v` if you want to preserve
+the named volume containing queued updates.
+
+## API Endpoints
+
+| Method | Endpoint | Purpose |
+|---|---|---|
+| GET | `/health` | Check backend health |
+| GET | `/api/convoy` | Retrieve simulated convoy telemetry |
+| POST | `/api/offline/updates` | Submit a simulated offline update |
+| GET | `/api/offline/updates` | Retrieve pending updates |
+| POST | `/api/offline/synchronize` | Run the synchronization simulation |
+
+Check the pending update queue:
+
+```bash
+curl -s http://127.0.0.1:8000/api/offline/updates | python3 -m json.tool
+```
+
+Simulate synchronization while offline:
+
+```bash
+curl -s -X POST http://127.0.0.1:8000/api/offline/synchronize \
+  -H "Content-Type: application/json" \
+  -d '{"is_online": false}'
+```
+
+Simulate synchronization while online:
+
+```bash
+curl -s -X POST http://127.0.0.1:8000/api/offline/synchronize \
+  -H "Content-Type: application/json" \
+  -d '{"is_online": true}'
+```
+
+The online simulation may clear the local queue. Use test data when
+demonstrating this workflow.
+
+## Testing
+
+Activate the virtual environment and run the tests:
+
+```bash
+source .venv/bin/activate
+PYTHONPATH=. python -m pytest -q
+```
+
+The latest recorded test run passed **19 tests**, with one
+Starlette deprecation warning.
+
+## Persistence Verification
 
 The backend was recreated using:
 
-`docker compose up -d --force-recreate backend`
+```bash
+docker compose up -d --force-recreate backend
+```
 
-After recreation, the backend health endpoint returned a healthy status,
-and the previously queued simulated convoy update remained available.
+After recreation, the backend health endpoint returned a healthy status
+and previously queued simulated data remained available.
 
-Verified demonstration data:
+The Docker named volume is:
 
-- Vehicle ID: `CONVOY-DOCKER-001`
-- Fuel level: 75%
-- Oxygen level: 94%
-- Emergency: false
+`rakshak-route_offline_queue_data`
 
-The queue is stored in the Docker named volume
-`rakshak-route_offline_queue_data`.
+## Current Limitations
 
-The automated test suite previously completed with 19 passing tests.
-
-Run tests from the project root:
-
-`PYTHONPATH=. python -m pytest -q`
+- Vehicle locations and telemetry are simulated.
+- Emergency and health readings are demonstration data.
+- Synchronization is simulated and does not verify remote delivery.
+- AWS Elastic Beanstalk deployment is not implemented yet.
+- Amazon SQS integration is not implemented yet.
+- This project is not intended for operational military tracking or
+  medical monitoring.
 
 ## Future Enhancements
 
-- AWS Elastic Beanstalk deployment
-- Amazon SQS integration
-- Improved frontend integration for offline updates
-- Better error handling, logging, and monitoring
-- Additional deployment and recovery testing
+- AWS Elastic Beanstalk deployment.
+- Amazon SQS integration.
+- Improved error handling and logging.
+- Additional synchronization and recovery tests.
+- Further frontend accessibility improvements.
 
 ## Disclaimer
 
-This is an educational prototype. Vehicle locations, telemetry, and
-connectivity scenarios are simulated. The synchronization workflow is
-currently a simulation and does not demonstrate verified delivery to a
-remote system.
-
-This project is not an operational military tracking or medical
-monitoring system.
+Rakshak-Route is an educational prototype. It is not an operational
+military tracking or medical monitoring system.
