@@ -441,3 +441,375 @@ footer {
         font-size: 15px;
     }
 }
+
+/* ==========================================
+   RAKSHAK-ROUTE — DASHBOARD UI POLISH
+   ========================================== */
+
+:root {
+    --panel-highlight: rgba(143, 164, 119, 0.12);
+    --focus-ring: rgba(194, 176, 138, 0.28);
+}
+
+/* Smoother overall experience */
+body {
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+    background: var(--sand-beige);
+    color: var(--charcoal);
+}
+
+/* Navigation polish */
+.nav-link {
+    border: 1px solid transparent;
+    transition:
+        background 0.2s ease,
+        border-color 0.2s ease,
+        transform 0.2s ease;
+}
+
+.nav-link:hover {
+    border-color: var(--border);
+    transform: translateX(2px);
+}
+
+.nav-link.active {
+    border-color: rgba(194, 176, 138, 0.25);
+}
+
+/* Clearer page hierarchy */
+.topbar {
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--border);
+}
+
+.eyebrow {
+    line-height: 1.5;
+}
+
+.subtitle {
+    margin-top: 7px;
+    line-height: 1.7;
+}
+
+/* Professional card interaction */
+.card {
+    position: relative;
+    overflow: hidden;
+    transition:
+        transform 0.22s ease,
+        border-color 0.22s ease,
+        box-shadow 0.22s ease;
+}
+
+.card:hover {
+    transform: translateY(-3px);
+    border-color: rgba(194, 176, 138, 0.42);
+    box-shadow: 0 14px 32px rgba(0, 0, 0, 0.22);
+}
+
+.vehicle-card {
+    background:
+        linear-gradient(
+            145deg,
+            rgba(89, 100, 71, 0.24),
+            rgba(37, 41, 35, 0.97)
+        );
+}
+
+.metric strong {
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.8px;
+}
+
+.progress-track {
+    height: 9px;
+    border: 1px solid rgba(240, 238, 229, 0.06);
+}
+
+.fuel-fill,
+.oxygen-fill {
+    box-shadow: 0 0 10px rgba(143, 164, 119, 0.18);
+}
+
+/* Location panels */
+.coordinates div {
+    transition:
+        background 0.2s ease,
+        border-color 0.2s ease;
+}
+
+.coordinates div:hover {
+    background: var(--panel-highlight);
+    border-color: rgba(194, 176, 138, 0.4);
+}
+
+.coordinates strong {
+    overflow-wrap: anywhere;
+    font-variant-numeric: tabular-nums;
+}
+
+/* Alerts */
+.alert-item {
+    line-height: 1.7;
+    overflow-wrap: anywhere;
+}
+
+.alert-item.warning {
+    border-left: 3px solid var(--danger);
+}
+
+.status-dot {
+    box-shadow: 0 0 8px rgba(167, 191, 118, 0.28);
+}
+
+/* Form controls and buttons */
+input,
+select,
+textarea,
+button {
+    font: inherit;
+}
+
+input[type="text"],
+input[type="number"],
+input[type="email"],
+select,
+textarea {
+    width: 100%;
+    min-height: 44px;
+    padding: 10px 12px;
+    color: var(--off-white);
+    background: rgba(15, 18, 15, 0.42);
+    border: 1px solid rgba(194, 176, 138, 0.30);
+    border-radius: 7px;
+    outline: none;
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease,
+        background 0.2s ease;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+    border-color: var(--sand-beige);
+    box-shadow: 0 0 0 3px var(--focus-ring);
+    background: rgba(15, 18, 15, 0.62);
+}
+
+input::placeholder,
+textarea::placeholder {
+    color: #92988B;
+}
+
+input[type="checkbox"],
+input[type="radio"] {
+    accent-color: var(--sand-beige);
+}
+
+button,
+input[type="submit"],
+input[type="button"] {
+    min-height: 42px;
+    padding: 10px 16px;
+    color: var(--charcoal);
+    background: var(--sand-beige);
+    border: 1px solid transparent;
+    border-radius: 7px;
+    font-weight: 700;
+    cursor: pointer;
+    transition:
+        transform 0.18s ease,
+        background 0.18s ease,
+        box-shadow 0.18s ease;
+}
+
+button:hover,
+input[type="submit"]:hover,
+input[type="button"]:hover {
+    background: #D4C5A4;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.18);
+    transform: translateY(-1px);
+}
+
+button:active,
+input[type="submit"]:active,
+input[type="button"]:active {
+    transform: translateY(0);
+}
+
+button:focus-visible,
+a:focus-visible {
+    outline: 2px solid var(--sand-beige);
+    outline-offset: 3px;
+}
+
+button:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+/* Form layout helpers: apply only when these elements exist */
+#offline-update-form {
+    display: grid;
+    gap: 14px;
+}
+
+#offline-update-form label {
+    display: block;
+    margin-bottom: 5px;
+    color: #D9DDCF;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+#offline-update-form input[type="checkbox"] {
+    width: 17px;
+    height: 17px;
+    vertical-align: middle;
+    margin-right: 7px;
+}
+
+#offline-update-form button {
+    justify-self: start;
+}
+
+/* Long status messages should not break the dashboard */
+#offline-update-message,
+#queue-message,
+#pending-updates,
+#pending-updates-list {
+    overflow-wrap: anywhere;
+}
+
+#offline-update-message,
+#queue-message {
+    font-size: 12px;
+    line-height: 1.7;
+}
+
+/* Connectivity panel */
+.connectivity-card {
+    padding: 22px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: linear-gradient(
+        120deg,
+        rgba(53, 69, 50, 0.62),
+        rgba(37, 41, 35, 0.9)
+    );
+}
+
+/* Footer and disclaimer readability */
+.notice {
+    line-height: 1.8;
+}
+
+footer {
+    line-height: 1.8;
+}
+
+/* Tablet and mobile refinements */
+@media (max-width: 1100px) {
+    .main-content {
+        padding: 24px;
+    }
+
+    .stats-grid,
+    .lower-grid {
+        gap: 14px;
+    }
+
+    .card {
+        padding: 19px;
+    }
+}
+
+@media (max-width: 720px) {
+    .sidebar {
+        border-right: 0;
+        border-bottom: 1px solid var(--border);
+    }
+
+    .brand {
+        gap: 10px;
+    }
+
+    .brand h2 {
+        font-size: 17px;
+    }
+
+    nav {
+        gap: 7px;
+    }
+
+    .nav-link {
+        padding: 10px;
+        font-size: 12px;
+    }
+
+    .nav-link:hover {
+        transform: none;
+    }
+
+    .main-content {
+        padding: 22px 15px;
+    }
+
+    .topbar {
+        gap: 14px;
+    }
+
+    .section {
+        margin-bottom: 24px;
+    }
+
+    .section-heading {
+        align-items: flex-start;
+        flex-wrap: wrap;
+    }
+
+    .card:hover {
+        transform: none;
+    }
+
+    .metric strong {
+        font-size: 29px;
+    }
+
+    .coordinates strong {
+        font-size: 15px;
+        overflow-wrap: anywhere;
+    }
+
+    .connectivity-card {
+        padding: 18px;
+    }
+
+    #offline-update-form button {
+        width: 100%;
+        justify-self: stretch;
+    }
+
+    footer {
+        flex-direction: column;
+    }
+}
+
+/* Respect users who prefer reduced motion */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        scroll-behavior: auto !important;
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
