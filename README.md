@@ -141,6 +141,20 @@ The Docker named volume is:
 
 `rakshak-route_offline_queue_data`
 
+## Screenshots
+
+The following screenshots demonstrate the Rakshak-Route prototype and its API.
+
+| Screenshot | Description |
+|---|---|
+| [01-api-documentation.png](screenshots/01-api-documentation.png) | API documentation |
+| [02-main-api.png](screenshots/02-main-api.png) | Main API response |
+| [03-health-check.png](screenshots/03-health-check.png) | Backend health check |
+| [04-rakshak-route-dashboard.png](screenshots/04-rakshak-route-dashboard.png) | Rakshak-Route dashboard |
+| [05-live-aws-dashboard.png](screenshots/05-live-aws-dashboard.png) | Live URL and convoy monitoring |
+| [06-offline-update-demo.png](screenshots/06-offline-update-demo.png) | Offline update form |
+| [07-offline-queue-status.png](screenshots/07-offline-queue-status.png) | Terminal output showing offline queue status |
+
 ## AWS Elastic Beanstalk Deployment
 
 - Application: `rakshak-route`
