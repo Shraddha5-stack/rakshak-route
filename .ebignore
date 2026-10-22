@@ -10,3 +10,6 @@ build/
 *.backup
 *.deploy-backup
 offline_queue_migration.json
+
+# Keep local development Compose config out of AWS deployment
+compose.yaml

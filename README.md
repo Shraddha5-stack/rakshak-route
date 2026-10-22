@@ -141,19 +141,27 @@ The Docker named volume is:
 
 `rakshak-route_offline_queue_data`
 
+## AWS Elastic Beanstalk Deployment
+
+- Application: `rakshak-route`
+- Environment: `rakshak-route-live`
+- Region: `ap-south-1` (Mumbai)
+- Live demo: http://rakshak-route-live.eba-p7at3xe3.ap-south-1.elasticbeanstalk.com/
+- The live homepage previously returned HTTP 200; availability can change.
+- AWS resources may incur charges.
+
 ## Current Limitations
 
 - Vehicle locations and telemetry are simulated.
 - Emergency and health readings are demonstration data.
 - Synchronization is simulated and does not verify remote delivery.
-- AWS Elastic Beanstalk deployment is not implemented yet.
+- The AWS Elastic Beanstalk deployment is available; check the live environment for current status.
 - Amazon SQS integration is not implemented yet.
 - This project is not intended for operational military tracking or
   medical monitoring.
 
 ## Future Enhancements
 
-- AWS Elastic Beanstalk deployment.
 - Amazon SQS integration.
 - Improved error handling and logging.
 - Additional synchronization and recovery tests.
